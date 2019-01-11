@@ -1,4 +1,5 @@
 #!/bin/bash
+#commit 11.01.2019 15:23
 if [ $# = 0 ] || [ $1 = "--help" ]
 then
 echo "Generate version 0.1"
