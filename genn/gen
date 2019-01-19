@@ -1,0 +1,72 @@
+#!/bin/bash
+if [ $# = 0 ] || [ $1 = "--help" ]
+then
+echo "Generate version 0.1"
+echo "---------------------------------------------------"
+echo "-h -- HTML file"
+echo "-p -- PHP file"
+echo "-jq - Add jQuery lib to head section"
+echo "-bs - Add Bootstrap 4 to head and body"
+echo "-- help - display this text"
+echo "-l -  display log file"
+echo "---"
+echo "gen type[-h | -p] jQuery [-jq] BootStrap [-bs]"
+echo "example : gen -h -jq -bs >> name"
+echo "Generate HTML file included jQuery and Bootrstrap"
+echo "---------------------------------------------------"
+elif [ $1 = "-l" ]
+then
+view /usr/local/bin/gen_log
+else
+#CODE GENERATING
+#---------------
+x=0
+for i in "$@";
+do 
+	if [ "$i" = "-h" ]
+	then 
+	t="html"
+	elif [ "$i" = "-p" ]
+	then
+	t="php"
+	elif [ "$i" = "-jq" ]
+	then
+	jquery="<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>"
+	jq="jQuery"
+	elif [ "$i" = "-bs" ]
+	then
+	bshead="<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css' integrity='sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB' crossorigin='anonymous'>"
+	bsbody="\t<script src='https://code.jquery.com/jquery-3.3.1.slim.min.js' integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo' crossorigin='anonymous'></script>\n
+	\t\t<script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js' integrity='sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49' crossorigin='anonymous'></script>\n
+	\t\t<script src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js' integrity='sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T' crossorigin='anonymous'></script>\n"
+	bs="BootStrap"
+	fi
+x=$(($x+1))
+done
+content="
+<html>\n
+\t<head>\n
+\t\t$jquery\n
+\t\t$bshead\n\
+\t</head>\n
+<body>\n
+\n
+\n
+\t$bsbody\n
+</body>\n
+</html>"
+read d 
+name=$d
+echo -e $content >> $name.$t
+#---------------
+#CODE GENERATING END
+logs="$USER |  $(date)---------------------------------------------------------------------------\n
+ Name of file : $name\n
+ Type :$t\n
+ Including :\n
+ $bs\n
+ $jq\n
+ In : $PWD\n	
+-------------------------------------------------------------------------------------------------------------\n"
+echo -e $logs >> /usr/local/bin/gen_log
+fi
